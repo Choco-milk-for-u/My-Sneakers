@@ -3,6 +3,10 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). 
 >>>> React Router and Axios was helped me.
 
+#Also i use mockAPI for my backend.
+
+
+
 ## Available Scripts
 
 In the project directory, you can run:
