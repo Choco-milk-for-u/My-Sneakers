@@ -1,79 +1,89 @@
 import { useEffect, useState } from "react";
-import Card from "./Card";
+import { Route } from "react-router-dom";
+
+
 import Header from "./Header";
 import Shadow from "./Shadow";
 import axios from "axios";
 
+import Home from "./pages/Home";
+import Favorites from "./pages/Favorites";
 
-  
 
 function App() {
-  const [cartOpened, setCartOpened] = useState(false);
+
   const [sneakers, setSneakers] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [searchValue, setSearchValue] = useState('');
   const [favoriteItems, setFavoriteItems] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [cartOpened, setCartOpened] = useState(false);
 
-  
-  
 
-  useEffect(()=>{
-    axios.get('https://6175581408834f0017c70bad.mockapi.io/items').then(res =>{
+
+  useEffect(() => {
+    axios.get('https://6175581408834f0017c70bad.mockapi.io/items').then(res => {
       setSneakers(res.data);
     });
-    axios.get('https://6175581408834f0017c70bad.mockapi.io/Cart').then(res =>{
+    axios.get('https://6175581408834f0017c70bad.mockapi.io/Cart').then(res => {
       setCartItems(res.data);
+    });
+    axios.get('https://6175581408834f0017c70bad.mockapi.io/Favorite').then(res => {
+      setFavoriteItems(res.data);
     });
   }, []);
 
-  const onAddToCart = (obj)=>{
-    
-    setCartItems(prev=>[...prev,obj]);
-    
+  const onAddToCart = (obj) => {
+
+    setCartItems(prev => [...prev, obj]);
+
     axios.post('https://6175581408834f0017c70bad.mockapi.io/Cart', obj);
 
   }
 
-  const onChangeSearchInput = (event)  =>{
+  const onChangeSearchInput = (event) => {
     let value = event.target.value;
     setSearchValue(value);
   }
-  
-  const onRemoveItem = (id)=>{
+
+  const onRemoveItem = (id) => {
     axios.delete(`https://6175581408834f0017c70bad.mockapi.io/Cart/${id}`);
     setCartItems((prev) => prev.filter(item => item.id !== id));
-    
+
   }
 
-  const onAddToFavorite = (obj)=>{
-    setFavoriteItems(prev=>[...prev,obj]);
-    axios.post('https://6175581408834f0017c70bad.mockapi.io/Favorite', obj);
+  const onAddToFavorite = async (obj) => {
+    try {
+      if(favoriteItems.find(prop=>prop.id===obj.id)){
+      axios.delete(`https://6175581408834f0017c70bad.mockapi.io/Favorite/${obj.id}`);
+      setFavoriteItems((prev)=> prev.filter((item)=> item.id !== obj.id))
+    }
+    else{
+      const { data } = await axios.post('https://6175581408834f0017c70bad.mockapi.io/Favorite', obj);
+      setFavoriteItems(prev => [...prev, data]);
+      
+    }
+    } catch (error) {
+      alert('WARNING cant add to Favorite');
+    }
+    
+    
+    
   }
 
 
   return (
     <div className="wrapper">
+      
 
-      { cartOpened ? <Shadow onRemove={onRemoveItem} items={cartItems}  onClose = {()=> setCartOpened(false)}/> : null}
-      <Header onClickCart = {()=> setCartOpened(true)}/>
-      <div className="content">
-        <div className="content__header">
-          <h1>{searchValue ? `Поиск по запросу: ${searchValue}`  : "Все кроссовки"}</h1>
-          <div className="search__block">
-            <img src="/img/search.svg" alt="search"></img>
-            <input placeholder="Поиск..." onChange={onChangeSearchInput} value={searchValue}></input>
+      {cartOpened ? <Shadow onRemove={onRemoveItem} items={cartItems} onClose={() => setCartOpened(false)} /> : null}
+      <Header onClickCart={() => setCartOpened(true)} />
+      <Route path="/" exact>
+        <Home sneakers={sneakers} searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearchInput={onChangeSearchInput} onAddToFavorite={onAddToFavorite} onAddToCart={onAddToCart} setCartOpened={setCartOpened}/>
+      </Route>
+      <Route path="/Favorites">
+          <Favorites items={favoriteItems} onAddFavorite={onAddToFavorite} />
+      </Route>
 
-          </div>
-        </div>
-
-        <div className="sneakers">
-          {sneakers.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase())).map((prop)=>(
-            <Card onFavorite={onAddToFavorite} key={prop.img} name={prop.name} price={prop.price} img={prop.img} id={prop.id} onAdded={onAddToCart} active={()=>setCartOpened(true)}/>
-          ))}
-          
-          
-        </div>
-      </div>
     </div>
   );
 }

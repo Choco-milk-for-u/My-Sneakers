@@ -1,4 +1,4 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 function Header(props){ 
 
@@ -6,7 +6,10 @@ function Header(props){
         return(
         <header className="header">
         <div className="header__left">
-          <img width={40} height={40} src="/img/logo.png" alt="logo" />
+          <Link to="/">
+          <img width={40} height={40} src="img/logo.png" alt="logo" />
+          </Link>
+          
           <div className="header__info">
             <h3>My Sneakers</h3>
             <p>Магазин лучших кросовок</p>
@@ -19,7 +22,12 @@ function Header(props){
             <span>1205 руб.</span>
           </li>
           <li>
-            <img src="img/profile.svg" alt="profile"></img>
+
+            <Link to="/Favorites"><img width={18} height={18} src="img/panel_fav.svg" alt="heart"></img></Link>
+            
+          </li>
+          <li>
+            <img width={18} height={18} src="img/profile.svg" alt="profile"></img>
           </li>
         </ul>
       </header>

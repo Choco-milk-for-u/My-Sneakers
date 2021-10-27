@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
 
-function Card({img, name,price,onAdded, id, active, onFavorite}) {
+function Card({img, name,price,onAdded, id, active, onFavorite, checked=false}) {
 
 
 const [isAdded, setIsAdded] = useState(false);
-const [isFavorite, setIsFavorite] = useState(false);
+const [isFavorite, setIsFavorite] = useState(checked);
 
 
   const handleClick = ()=>{
@@ -15,6 +15,7 @@ const [isFavorite, setIsFavorite] = useState(false);
   }
   
   const handleFavorite = ()=>{
+    
     onFavorite({img,name,price,id});
     setIsFavorite(!isFavorite);
   }
