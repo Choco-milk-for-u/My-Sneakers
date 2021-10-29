@@ -1,11 +1,13 @@
+import React from "react";
 import Card from "../Card";
+import {StageContext} from "../App";
 
 function Favorites(props){
+  const {onAddToFavorite, favoriteItems} = React.useContext(StageContext);
 
-  const handleThat = (obj)=>{
-    console.log(props.onAddFavorite);
-    props.onAddFavorite(obj);
-  }
+  
+
+
 
     return(
         <div className="content">
@@ -16,8 +18,8 @@ function Favorites(props){
 
         <div className="sneakers">
           
-            {props.items.map((prop)=>{
-              return <Card  key={prop.img} name={prop.name} price={prop.price} img={prop.img} id={prop.id} checked={true} onFavorite={handleThat}/>
+            {favoriteItems.map((prop)=>{
+              return <Card  key={prop.img} name={prop.name} price={prop.price} img={prop.img} id={prop.id} checked={favoriteItems.some(obj=>Number(obj.id)===Number(prop.id))} onFavorite={onAddToFavorite}/>
             })}
            
           
