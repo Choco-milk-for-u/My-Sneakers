@@ -171,6 +171,7 @@ li{
   margin-bottom: 40px;
   justify-content: space-between;
 }
+
 .right__side{
   position: absolute;
   width: 420px;
@@ -179,6 +180,9 @@ li{
   background-color: #ffffff;
   box-shadow: -10px 4px 24px rgba(0,0,0,0.1);
   padding: 30px;
+
+  transform: translateX(100%);
+  transition: all .3s;
 
   .items{
     overflow: auto; 
@@ -201,6 +205,11 @@ li{
   top: 0;
   background-color: rgba(0,0,0,0.1);
   z-index: 1;
+
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  transition: all .3s ease-in-out;
 }
 .cartItem{
   display: flex;
@@ -260,6 +269,7 @@ li{
   }
   .greenButton{
     position: relative;
+    top:-30px;
     &:hover{
       img{
         transform: translateX(5px);
@@ -303,5 +313,13 @@ li{
 
   img{
     cursor: pointer;
+  }
+}
+.shadowVisible{
+  visibility: visible;
+  opacity: 1;
+
+  .right__side{
+    transform: translateX(0);
   }
 }

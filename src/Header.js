@@ -1,7 +1,11 @@
+import React from "react";
 import { Link } from "react-router-dom";
+import {StageContext} from "./App";
+
 
 function Header(props){ 
-
+const {cartItems} = React.useContext(StageContext);
+const total = cartItems.reduce((sum, obj) => obj.price + sum,0);
     
         return(
         <header className="header">
@@ -19,7 +23,7 @@ function Header(props){
           <li onClick={props.onClickCart}>
             <img src="img/car.svg" alt="card"></img>
 
-            <span>1205 руб.</span>
+            <span>{total} руб.</span>
           </li>
           <li>
 
@@ -27,7 +31,8 @@ function Header(props){
             
           </li>
           <li>
-            <img width={18} height={18} src="img/profile.svg" alt="profile"></img>
+            <Link to="/Profile"><img width={18} height={18} src="img/profile.svg" alt="profile"></img></Link>
+           
           </li>
         </ul>
       </header>

@@ -8,17 +8,18 @@ function Card({img, name,price,onAdded, id, active, onFavorite, checked=false, a
 
 const [isFavorite, setIsFavorite] = useState(checked);
 const {onLooking} = React.useContext(StageContext);
+const obj = {img, name,price,id,parentId : id};
 
 
   const handleClick = ()=>{
-    onAdded({img, name,price,id});
+    onAdded(obj);
     
     active();
   }
   
   const handleFavorite = ()=>{
     
-    onFavorite({img,name,price,id});
+    onFavorite(obj);
     setIsFavorite(!isFavorite);
   }
 
@@ -45,7 +46,7 @@ const {onLooking} = React.useContext(StageContext);
       :
       <>
          <div className="favorite">
-        <img  onClick={handleFavorite} src={isFavorite ? "img/active.svg" : "/img/inactive_favorite.svg"} alt="heart"></img>
+        {onFavorite && <img  onClick={handleFavorite} src={isFavorite ? "img/active.svg" : "/img/inactive_favorite.svg"} alt="heart"></img>}
       </div>
       <img width={133} height={122} src={img} alt="sneaker1"></img>
       <h5>{name}</h5>
@@ -54,7 +55,7 @@ const {onLooking} = React.useContext(StageContext);
           <p>Цена:</p>
           <b>{price} руб.</b>
         </div>
-        <img id="o" width="32px" height="32px" src={onLooking(id) ? "/img/accept.png" : "img/plus.svg"} alt="sneaker2" onClick={handleClick}></img>
+        {onAdded && <img id="o" width="32px" height="32px" src={onLooking(id) ? "/img/accept.png" : "img/plus.svg"} alt="sneaker2" onClick={handleClick}></img>}
 
       </div>
       </>

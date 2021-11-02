@@ -1,13 +1,23 @@
+import axios from "axios";
 import React from "react";
+import { StageContext } from "./App";
 
-function Shadow({onClose, onRemove, items = []}){
+function Shadow({onClose, onRemove, items = [],onAdd,opened}){
+    const {cartItems,setCartItems} = React.useContext(StageContext);
+    const total = items.reduce((sum, obj) => obj.price + sum,0);
 
+    const onClickOver = ()=>{
+        cartItems.map(prop=>{return axios.post('https://6175581408834f0017c70bad.mockapi.io/orders', prop)});
 
+        
+        setCartItems([]);
+    }
 
     
         return (
-            <div className="shadow">
-                <div className="right__side">
+           
+            <div className={`shadow ${opened ? 'shadowVisible' : '' }`} >
+                <div className={`right__side`}>
                     <div className="title_of_side">
                         <h2>Корзина</h2>
                         <img onClick={onClose} width="32px" height="32px" src="img/cancel.svg" alt="button_cancel"></img>
@@ -41,15 +51,15 @@ function Shadow({onClose, onRemove, items = []}){
                             <li>
                                 <span>Итого:</span>
                                 <div></div>
-                                <b>21 498 руб.</b>
+                                <b>{total} руб.</b>
                             </li>
                             <li>
                                 <span>Налог 5%:</span>
                                 <div></div>
-                                <b>1074 руб.</b>
+                                <b>{(total / 100)*5} руб.</b>
                             </li>
                         </ul>
-                        <button className="greenButton">Оформить Заказ<img src="/img/right.svg" alt="arrow"></img></button>
+                        <button onClick={onClickOver} className="greenButton">Оформить Заказ<img src="/img/right.svg" alt="arrow"></img></button>
                     </div>
 
                 </div>
